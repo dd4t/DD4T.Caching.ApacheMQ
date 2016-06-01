@@ -91,7 +91,7 @@
 		
 		<XmlUpdate XmlFileName="$(NuSpecFile)" XPath="//version" Value="$(Version)" />
 		
-		<Exec Command='$(NuGetPath)\nuget.exe pack "@(NuSpecFile)"' WorkingDirectory="$(ProjectWorkPackageDirectory)"/>
+		<Exec Command='$(NuGetPath)\nuget.exe pack "$(NuSpecFile)"' WorkingDirectory="$(ProjectWorkPackageDirectory)"/>
 
 		<ItemGroup>
 			<NuGetPackage Include="$(ProjectWorkDirectory)\**\*.nupkg"/>
