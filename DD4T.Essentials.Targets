@@ -27,15 +27,6 @@
 		<ConfigurationDirectory>$([System.IO.Directory]::GetParent($(ConfigurationDirectory)))\Configuration</ConfigurationDirectory>
 		<NuGetPath>$([System.IO.Directory]::GetParent($(NuGetFolder)))\.nuget</NuGetPath>
 
-		<ProjectName>$(AssemblyName)</ProjectName>
-		<ProjectWorkDirectory>$(BuildWorkDirectory)\$(ProjectName)</ProjectWorkDirectory>
-		<ProjectWorkPackageDirectory>$(ProjectWorkDirectory)\package</ProjectWorkPackageDirectory>
-		<ProjectWorkLibDirectory>$(ProjectWorkPackageDirectory)\lib</ProjectWorkLibDirectory>
-		<ProjectWorkLibNet40Directory>$(ProjectWorkLibDirectory)\net40</ProjectWorkLibNet40Directory>
-		<ProjectWorkLibNet45Directory>$(ProjectWorkLibDirectory)\net45</ProjectWorkLibNet45Directory>
-		
-		<NuSpecFileLocation>$(ConfigurationDirectory)\$(ProjectName)\$(ProjectName).nuspec</NuSpecFileLocation>
-		<NuGetContentDirectory>$(ConfigurationDirectory)\$(ProjectName)\packageContent</NuGetContentDirectory>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -53,6 +44,18 @@
 	</Target>
 	
 	<Target Name="AfterBuild" DependsOnTargets="Prepare">
+		<PropertyGroup>
+			<ProjectName>$(AssemblyName)</ProjectName>
+			<ProjectWorkDirectory>$(BuildWorkDirectory)\$(ProjectName)</ProjectWorkDirectory>
+			<ProjectWorkPackageDirectory>$(ProjectWorkDirectory)\package</ProjectWorkPackageDirectory>
+			<ProjectWorkLibDirectory>$(ProjectWorkPackageDirectory)\lib</ProjectWorkLibDirectory>
+			<ProjectWorkLibNet40Directory>$(ProjectWorkLibDirectory)\net40</ProjectWorkLibNet40Directory>
+			<ProjectWorkLibNet45Directory>$(ProjectWorkLibDirectory)\net45</ProjectWorkLibNet45Directory>
+			
+			<NuSpecFileLocation>$(ConfigurationDirectory)\$(ProjectName)\$(ProjectName).nuspec</NuSpecFileLocation>
+			<NuSpecFile>$(ProjectWorkDirectory)\$(ProjectName).nuspec</NuSpecFile>
+			<NuGetContentDirectory>$(ConfigurationDirectory)\$(ProjectName)\packageContent</NuGetContentDirectory>
+		</PropertyGroup>
 		<ItemGroup>
 			<NuSpecFile Include="$(NuSpecFileLocation)"/>
 			<OutputFiles Include="$(BuildBinDirectory)\$(ProjectName).dll"/>
@@ -86,7 +89,7 @@
 		
 		<Copy SourceFiles="@(ContentFiles)" DestinationFiles="@(ContentFiles->'$(ProjectWorkPackageDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" />
 		
-		<XmlUpdate XmlFileName="$(NuSpecFileLocation)" XPath="//version" Value="$(Version)" />
+		<XmlUpdate XmlFileName="$(NuSpecFile)" XPath="//version" Value="$(Version)" />
 		
 		<Exec Command='$(NuGetPath)\nuget.exe pack "@(NuSpecFile)"' WorkingDirectory="$(ProjectWorkPackageDirectory)"/>
 

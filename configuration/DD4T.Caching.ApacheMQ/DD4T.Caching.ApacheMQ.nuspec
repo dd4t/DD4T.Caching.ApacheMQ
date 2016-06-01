@@ -2,7 +2,7 @@
 <package xmlns:nuget="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>DD4T.Caching.ApacheMQ</id>
-    <version>1.0.0.0-build20160602010523</version>
+    <version></version>
     <authors>DD4T Community</authors>
     <owners>DD4T Community</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
