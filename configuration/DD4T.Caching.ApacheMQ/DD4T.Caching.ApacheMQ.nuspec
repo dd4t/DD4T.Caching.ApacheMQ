@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:nuget="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DD4T.Caching.ApacheMQ</id>
+    <version>1.0.0.0-build20160602010523</version>
+    <authors>DD4T Community</authors>
+    <owners>DD4T Community</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DD4T JMS Caching Agent</description>
+    <releaseNotes>
+    </releaseNotes>
+    <tags>SDLTridion Tridion SDL SDLWeb DD4T DD4T2 Caching JMS ApacheMQ</tags>
+    <dependencies>
+      <dependency id="DD4T.Core" version="2.0.8.129-alpha" />
+      <dependency id="Apache.NMS" version="1.7.1" />
+      <dependency id="Apache.NMS.ActiveMQ" version="1.7.1" />
+    </dependencies>
+  </metadata>
+</package>

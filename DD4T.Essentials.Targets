@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<PropertyGroup>
+		<Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+
+		<!-- Source Directories -->
+		<BaseDirectory Condition="'$(BaseDirectory)' == ''">$(MSBuildProjectDirectory)\..\..</BaseDirectory>
+		<BaseDirectory Condition="!Exists('$(BaseDirectory)\source')">..</BaseDirectory>
+
+		<SourceDirectory>$(BaseDirectory)\source</SourceDirectory>
+		<SourceDirectory>$([System.IO.Directory]::GetParent($(SourceDirectory)))\source</SourceDirectory>
+
+		<!-- Build Directories -->
+		<BuildOutputDirectory>$(BaseDirectory)\build</BuildOutputDirectory>
+		<BuildOutputDirectory>$([System.IO.Directory]::GetParent($(BuildOutputDirectory)))\build</BuildOutputDirectory>
+		<BuildBinDirectory>$(BuildOutputDirectory)\bin</BuildBinDirectory>
+		<BuildDocDirectory>$(BuildOutputDirectory)\doc</BuildDocDirectory>
+		<BuildLogDirectory>$(BuildOutputDirectory)\log</BuildLogDirectory>
+		<BuildPackageDirectory>$(BuildOutputDirectory)\package</BuildPackageDirectory>
+		<BuildWorkDirectory>$(BuildOutputDirectory)\work</BuildWorkDirectory>
+
+		<DependencyDirectory>$(BaseDirectory)\dependencies</DependencyDirectory>
+		<NuGetFolder>$(SourceDirectory)\.nuget</NuGetFolder>
+
+		<ConfigurationDirectory>$(BaseDirectory)\configuration</ConfigurationDirectory>
+
+		<ConfigurationDirectory>$([System.IO.Directory]::GetParent($(ConfigurationDirectory)))\Configuration</ConfigurationDirectory>
+		<NuGetPath>$([System.IO.Directory]::GetParent($(NuGetFolder)))\.nuget</NuGetPath>
+
+		<ProjectName>$(AssemblyName)</ProjectName>
+		<ProjectWorkDirectory>$(BuildWorkDirectory)\$(ProjectName)</ProjectWorkDirectory>
+		<ProjectWorkPackageDirectory>$(ProjectWorkDirectory)\package</ProjectWorkPackageDirectory>
+		<ProjectWorkLibDirectory>$(ProjectWorkPackageDirectory)\lib</ProjectWorkLibDirectory>
+		<ProjectWorkLibNet40Directory>$(ProjectWorkLibDirectory)\net40</ProjectWorkLibNet40Directory>
+		<ProjectWorkLibNet45Directory>$(ProjectWorkLibDirectory)\net45</ProjectWorkLibNet45Directory>
+		
+		<NuSpecFileLocation>$(ConfigurationDirectory)\$(ProjectName)\$(ProjectName).nuspec</NuSpecFileLocation>
+		<NuGetContentDirectory>$(ConfigurationDirectory)\$(ProjectName)\packageContent</NuGetContentDirectory>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<BaseDirectory Include="$(BaseDirectory)"/>
+		<ConfigurationDirectory Include="$(ConfigurationDirectory)"/>
+	</ItemGroup>
+	
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+	<Target Name="Prepare">
+	<Message Text="MSBuildProjectDirectory: $(MSBuildProjectDirectory)" Importance="High"/>
+		<MakeDir Directories="$(BuildOutputDirectory)"/>
+		<MakeDir Directories="$(BuildPackageDirectory)"/>
+		<MakeDir Directories="$(BuildWorkDirectory)"/>
+	</Target>
+	
+	<Target Name="AfterBuild" DependsOnTargets="Prepare">
+		<ItemGroup>
+			<NuSpecFile Include="$(NuSpecFileLocation)"/>
+			<OutputFiles Include="$(BuildBinDirectory)\$(ProjectName).dll"/>
+			<ContentFiles Include="$(NuGetContentDirectory)\**\*.*" />
+			<ExistingFiles Include="$(BuildPackageDirectory)\$(ProjectName)*.*"/>
+		</ItemGroup>
+
+		<RemoveDir Directories="$(ProjectWorkDirectory)"/>
+		<Delete Files="@(ExistingFiles)" />
+		
+		<Message Text="Creating package for $(ProjectName)" Importance="high"/>		
+		
+		<GetInformationalVersion AssemblyFile="@(OutputFiles)">
+    		<Output TaskParameter="Version" PropertyName="Version"/>
+    	</GetInformationalVersion>
+
+    	<GetNewDevVersion OldVersion="$(Version)" Condition="'$(Configuration)' == 'Debug'">
+    		<Output TaskParameter="NewVersion" PropertyName="Version"/>
+    	</GetNewDevVersion>
+
+		<MakeDir Directories="$(ProjectWorkDirectory)"/>
+		<MakeDir Directories="$(ProjectWorkPackageDirectory)"/>
+		<MakeDir Directories="$(ProjectWorkPackageLibDirectory)"/>
+		<MakeDir Directories="$(ProjectWorkPackageLibNet40Directory)"/>
+		<MakeDir Directories="$(ProjectWorkPackageLibNet45Directory)"/>
+		
+		<Copy SourceFiles="@(NuSpecFile)" DestinationFiles="@(NuSpecFile->'$(ProjectWorkDirectory)\%(Filename)%(Extension)')" />
+		
+		<Copy SourceFiles="@(OutputFiles)" DestinationFiles="@(OutputFiles->'$(ProjectWorkLibNet40Directory)\%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(OutputFiles)" DestinationFiles="@(OutputFiles->'$(ProjectWorkLibNet45Directory)\%(Filename)%(Extension)')" />
+		
+		<Copy SourceFiles="@(ContentFiles)" DestinationFiles="@(ContentFiles->'$(ProjectWorkPackageDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" />
+		
+		<XmlUpdate XmlFileName="$(NuSpecFileLocation)" XPath="//version" Value="$(Version)" />
+		
+		<Exec Command='$(NuGetPath)\nuget.exe pack "@(NuSpecFile)"' WorkingDirectory="$(ProjectWorkPackageDirectory)"/>
+
+		<ItemGroup>
+			<NuGetPackage Include="$(ProjectWorkDirectory)\**\*.nupkg"/>
+		</ItemGroup>
+		
+		<Copy SourceFiles="@(NuGetPackage)" DestinationFiles="@(NuGetPackage->'$(BuildPackageDirectory)\%(Filename)%(Extension)')" />
+
+		<XmlPeek
+			Namespaces="&lt;Namespace Prefix='nuget' Uri='http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd' /&gt;"
+			Query="//id/text()"
+			XmlInputPath="$(NuSpecFileLocation)">
+			<Output TaskParameter="Result" ItemName="PackageName" />
+		</XmlPeek>
+
+		<!-- Create ZipPackage -->
+		<Zip Flatten="true" Files="@(OutputFiles)" ZipFileName="$(BuildPackageDirectory)\@(PackageName).$(Version).zip" WorkingDirectory="$(ProjectWorkPackageDirectory)" />
+
+		<Message Text="Installing package to local NuGet repo" Importance="high" Condition="'$(NUGET_LOCALREPO)' != ''" />
+		<CallTarget Targets="Install" Condition="'$(NUGET_LOCALREPO)' != ''" />
+	</Target>
+	
+	<Target Name="Install">
+		<ItemGroup>
+			<NuGetPackage Include="$(BuildPackageDirectory)\$(AssemblyName)*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(NuGetPackage)" DestinationFolder="$(NUGET_LOCALREPO)" />
+	</Target>
+	
+	<!-- Task for retrieving ProductVersion from an Assembly -->
+	<UsingTask TaskName="GetInformationalVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
+		<ParameterGroup>
+			<AssemblyFile ParameterType="System.String" Required="true" />
+			<Version ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.Diagnostics" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+					Log.LogMessage("Getting version details of assembly " + this.AssemblyFile, MessageImportance.High);
+					this.Version = FileVersionInfo.GetVersionInfo(this.AssemblyFile.Split(';')[0]).ProductVersion;
+					Log.LogMessage("AssemblyVersion: " + this.Version, MessageImportance.High);
+				]]>
+			</Code>
+		</Task>		
+	</UsingTask>
+
+	<!-- Task for generating a new version for local development -->
+	<UsingTask TaskName="GetNewDevVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
+		<ParameterGroup>
+			<OldVersion ParameterType="System.String" Required="true" />
+			<NewVersion ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.Diagnostics" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+					Log.LogMessage("Getting a new version for " + this.OldVersion, MessageImportance.High);
+					Version version = new Version(this.OldVersion.Split('-')[0]);
+					this.NewVersion = version.ToString() + "-build" + DateTime.Now.ToString("yyyyMMddHHmmss");
+					Log.LogMessage("New Version: " + this.NewVersion, MessageImportance.High);
+				]]>
+			</Code>
+		</Task>		
+	</UsingTask>
+
+</Project>
