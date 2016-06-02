@@ -5,10 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD4T.Caching.ApacheMQ", "DD4T.Caching.ApacheMQ\DD4T.Caching.ApacheMQ.csproj", "{77983C8A-F783-450D-9D0C-D7B5C6D9A6B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD4T.Logging.NLog", "DD4T.Logging.NLog\DD4T.Logging.NLog.csproj", "{3347D234-1071-40B4-BEE5-3DD5514C4156}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DD4T.Logging.Log4Net", "DD4T.Logging.Log4Net\DD4T.Logging.Log4Net.csproj", "{6EA00F1D-0339-4A48-986F-F5D44D7D4087}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{77983C8A-F783-450D-9D0C-D7B5C6D9A6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77983C8A-F783-450D-9D0C-D7B5C6D9A6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77983C8A-F783-450D-9D0C-D7B5C6D9A6B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3347D234-1071-40B4-BEE5-3DD5514C4156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3347D234-1071-40B4-BEE5-3DD5514C4156}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3347D234-1071-40B4-BEE5-3DD5514C4156}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3347D234-1071-40B4-BEE5-3DD5514C4156}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EA00F1D-0339-4A48-986F-F5D44D7D4087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EA00F1D-0339-4A48-986F-F5D44D7D4087}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EA00F1D-0339-4A48-986F-F5D44D7D4087}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EA00F1D-0339-4A48-986F-F5D44D7D4087}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

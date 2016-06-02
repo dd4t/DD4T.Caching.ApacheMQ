@@ -19,7 +19,6 @@ namespace DD4T.Caching.ApacheMQ
             return mappings;
         }
         
-
         public IDictionary<Type, Type> SingleInstanceMappings
         {
             get
