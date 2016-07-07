@@ -11,12 +11,12 @@
 
 	<Target Name="Clean">
 		<!-- Clean removes all build artifacts to prepare for a new build. -->
-		<MSBuild Projects="$(MSBuildProjectDirectory)\source\DD4T.Essentials.sln" Targets="Clean" />
+		<MSBuild Projects="$(MSBuildProjectDirectory)\source\DD4T.Caching.ApacheMQ.sln" Targets="Clean" />
 		<RemoveDir Directories="build"/>
 	</Target>
 	<Target Name="Compile">
 		<!-- Build the solution. -->
-		<MSBuild Projects="$(MSBuildProjectDirectory)\source\DD4T.Essentials.sln" Targets="Build" Properties="Configuration=$(Configuration)" >
+		<MSBuild Projects="$(MSBuildProjectDirectory)\source\DD4T.Caching.ApacheMQ.sln" Targets="Build" Properties="Configuration=$(Configuration)" >
 			<Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
         </MSBuild>
 	</Target>

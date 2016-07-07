@@ -52,9 +52,9 @@
 			<ProjectWorkLibNet40Directory>$(ProjectWorkLibDirectory)\net40</ProjectWorkLibNet40Directory>
 			<ProjectWorkLibNet45Directory>$(ProjectWorkLibDirectory)\net45</ProjectWorkLibNet45Directory>
 			
-			<NuSpecFileLocation>$(ConfigurationDirectory)\$(ProjectName)\$(ProjectName).nuspec</NuSpecFileLocation>
+			<NuSpecFileLocation>$(ConfigurationDirectory)\$(ProjectName).nuspec</NuSpecFileLocation>
 			<NuSpecFile>$(ProjectWorkDirectory)\$(ProjectName).nuspec</NuSpecFile>
-			<NuGetContentDirectory>$(ConfigurationDirectory)\$(ProjectName)\packageContent</NuGetContentDirectory>
+			<NuGetContentDirectory>$(ConfigurationDirectory)\packageContent</NuGetContentDirectory>
 		</PropertyGroup>
 		<ItemGroup>
 			<NuSpecFile Include="$(NuSpecFileLocation)"/>
