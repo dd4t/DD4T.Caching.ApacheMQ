@@ -11,7 +11,7 @@
     </releaseNotes>
     <tags>SDLTridion Tridion SDL SDLWeb DD4T DD4T2 Caching JMS ApacheMQ</tags>
     <dependencies>
-      <dependency id="DD4T.Core" version="2.0.8.129-alpha" />
+      <dependency id="DD4T.Core" version="2.1.0" />
       <dependency id="Apache.NMS" version="1.7.1" />
       <dependency id="Apache.NMS.ActiveMQ" version="1.7.1" />
     </dependencies>
