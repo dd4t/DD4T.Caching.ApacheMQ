@@ -47,7 +47,7 @@
 		<PropertyGroup>
 			<ProjectName>$(AssemblyName)</ProjectName>
 			<ProjectWorkDirectory>$(BuildWorkDirectory)\$(ProjectName)</ProjectWorkDirectory>
-			<ProjectWorkPackageDirectory>$(ProjectWorkDirectory)\package</ProjectWorkPackageDirectory>
+			<ProjectWorkPackageDirectory>$(ProjectWorkDirectory)</ProjectWorkPackageDirectory>
 			<ProjectWorkLibDirectory>$(ProjectWorkPackageDirectory)\lib</ProjectWorkLibDirectory>
 			<ProjectWorkLibNet40Directory>$(ProjectWorkLibDirectory)\net40</ProjectWorkLibNet40Directory>
 			<ProjectWorkLibNet45Directory>$(ProjectWorkLibDirectory)\net45</ProjectWorkLibNet45Directory>
