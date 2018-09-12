@@ -8,9 +8,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DD4T.Caching.ApacheMQ
 {
@@ -60,11 +57,21 @@ namespace DD4T.Caching.ApacheMQ
             }
         }
 
+        private Uri ConstructUri()
+        {
+            if (_configuration.JMSUrl != null)
+            {
+                return new Uri(string.Format("activemq:{0}", _configuration.JMSUrl));
+            }
+            return new Uri(string.Format("activemq:tcp://{0}:{1}", _configuration.JMSHostname, _configuration.JMSPort));
+        }
+
         private void StartConnection()
         {
             // Connection to apcaheMQ, the connection should stay open! 
             // That means that this object should be kept in memory. 1 way to achieve this, is to register it as a SingleInstance in your DI container
-            Uri connecturi = new Uri(string.Format("activemq:tcp://{0}:{1}", _configuration.JMSHostname, _configuration.JMSPort));
+            Uri connecturi = ConstructUri();
+            _logger.Debug("About to connect to " + connecturi);
 
             IConnectionFactory factory = new ConnectionFactory(connecturi);
 
