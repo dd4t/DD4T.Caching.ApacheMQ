@@ -59,7 +59,7 @@ namespace DD4T.Caching.ApacheMQ
 
         private Uri ConstructUri()
         {
-            if (_configuration.JMSUrl != null)
+            if (!string.IsNullOrWhiteSpace(_configuration.JMSUrl))
             {
                 return new Uri(string.Format("activemq:{0}", _configuration.JMSUrl));
             }
