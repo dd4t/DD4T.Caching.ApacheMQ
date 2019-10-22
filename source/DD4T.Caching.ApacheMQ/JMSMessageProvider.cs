@@ -109,7 +109,7 @@ namespace DD4T.Caching.ApacheMQ
             try
             {
                 ICacheEvent cacheEvent = CacheEventSerializer.Deserialize(message.Text);
-                // In one of the post-tridion9 hotfixes, SDL have changed the key from:
+                // In Tridion 9, the key sometimes changes from the original format:
                 //     1:123:456 (namespace:pubid:itemid)
                 // to:
                 //     1:123:456:PageMeta (namespace:pubid:itemid:class) -- can also be ComponentMeta, BinaryMeta, etc
@@ -174,7 +174,7 @@ namespace DD4T.Caching.ApacheMQ
         }
         #endregion
 
-        private static Regex reFixCacheEventKey = new Regex("^([0-9]+:[0-9]+:[0-9]+).*$");
+        private static Regex reFixCacheEventKey = new Regex("^([0-9]+:[0-9]+:[0-9]+).*$", RegexOptions.Compiled);
 
         private static string FixCacheEventKey(string originalKey)
         {
