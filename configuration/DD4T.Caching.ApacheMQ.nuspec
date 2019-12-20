@@ -11,9 +11,10 @@
     </releaseNotes>
     <tags>SDLTridion Tridion SDL SDLWeb DD4T DD4T2 Caching JMS ApacheMQ</tags>
     <dependencies>
-      <dependency id="DD4T.Core" version="2.2.9" />
+      <dependency id="DD4T.Core" version="2.5" />
       <dependency id="Apache.NMS" version="1.7.1" />
       <dependency id="Apache.NMS.ActiveMQ" version="1.7.2" />
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
     </dependencies>
   </metadata>
 </package>
