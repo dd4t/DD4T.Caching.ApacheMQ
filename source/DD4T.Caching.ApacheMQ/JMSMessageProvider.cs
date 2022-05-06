@@ -84,11 +84,12 @@ namespace DD4T.Caching.ApacheMQ
             IDestination destination = session.GetTopic(_configuration.JMSTopic);
             IMessageConsumer consumer = session.CreateConsumer(destination);
             consumer.Listener += new MessageListener(HandleMessage);
+            _logger.Debug($"Connected to {connecturi}");
         }
 
         private void connection_ExceptionListener(Exception e)
         {
-            _logger.Error("Exception occurred while connecting to JMS", e);
+            _logger.Error($"Exception occurred while connecting to JMS: {e.Message}\r\n{e.StackTrace}");
             _logger.Debug("Restarting JMS connection");
             StartConnection();
         }
@@ -104,7 +105,7 @@ namespace DD4T.Caching.ApacheMQ
                 return;
             }
 
-            _logger.Debug("received text message with id {0} and text {1}", message.NMSMessageId, message.Text);
+            // _logger.Debug("received text message with id {0} and text {1}", message.NMSMessageId, message.Text);
 
             try
             {
