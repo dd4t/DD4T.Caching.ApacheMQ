@@ -4,11 +4,15 @@
 # DD4T.Caching.ApacheMQ
 Invalidation of items in the cache when Tridion pages or DCPs are republished or unpublished. Uses the Apache ActiveMQ messaging system.
 
+## Release notes for version 2.6
+- Upgraded Newtonsoft.Json to 13.0.3
+- Upgraded DD4T Core and Model to 2.6.1
+- Upgraded Apache.NMS and Apache.NMS.ActiveMQ to 2.1.0
+
 ## Release notes for version 2.5
 
 - Supports Tridion 9 and higher, as well as older versions (6)
 - Upgraded Newtonsoft.Json to 11.0.2
-
 
 ## Caching and cache invalidation
 DD4T .NET would not work without the help of caching. Any page or component presentation, any link or binary which DD4T retrieves from the Tridion broker, is cached. Normally (if you use the DefaultCacheAgent) all these items are cached in memory by the web application.

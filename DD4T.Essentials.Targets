@@ -34,7 +34,7 @@
 		<ConfigurationDirectory Include="$(ConfigurationDirectory)"/>
 	</ItemGroup>
 	
-	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(SolutionDir)packages\MSBuildTasks.1.5.0.235\tools\MSBuild.Community.Tasks.Targets"/>
 
 	<Target Name="Prepare">
 	<Message Text="MSBuildProjectDirectory: $(MSBuildProjectDirectory)" Importance="High"/>
